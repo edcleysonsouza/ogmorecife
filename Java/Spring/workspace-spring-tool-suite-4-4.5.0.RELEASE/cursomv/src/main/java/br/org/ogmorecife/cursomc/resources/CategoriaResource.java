@@ -2,8 +2,10 @@ package br.org.ogmorecife.cursomc.resources;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.org.ogmorecife.cursomc.domain.Categoria;
+import br.org.ogmorecife.cursomc.resources.exception.StandardError;
 import br.org.ogmorecife.cursomc.services.CategoriaService;
+import br.org.ogmorecife.cursomc.services.exceptions.ObjectNotFoundException;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -21,11 +25,29 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService service;
 	
+	@RequestMapping(value="/{id}", method = RequestMethod.GET)	
+	public ResponseEntity<?> find(@PathVariable Integer id) {
+		Categoria obj = service.find(id);			
+		return ResponseEntity.ok().body(obj);
+	}
+	
+	
+	/*
+	
+	Implementation with try catch block on the CategoriaResource without use of a ResourceExceptionHandler
 	//@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	@GetMapping(value="/{id}")
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Categoria obj = service.buscar(id);
-		return ResponseEntity.ok().body(obj);
+		try {
+			Categoria obj = service.buscar(id);			
+			return ResponseEntity.ok().body(obj);
+		}catch (ObjectNotFoundException e){			
+			StandardError erro  = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), System.currentTimeMillis());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+		}catch (Exception e){
+			StandardError erro  = new StandardError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), System.currentTimeMillis());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);	
+		}
 	}
 	
 	/*
