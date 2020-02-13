@@ -10,8 +10,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.org.ogmorecife.cursomc.domain.Categoria;
+import br.org.ogmorecife.cursomc.domain.Cidade;
+import br.org.ogmorecife.cursomc.domain.Estado;
 import br.org.ogmorecife.cursomc.domain.Produto;
 import br.org.ogmorecife.cursomc.repositories.CategoriaRepository;
+import br.org.ogmorecife.cursomc.repositories.CidadeRepository;
+import br.org.ogmorecife.cursomc.repositories.EstadoRepository;
 import br.org.ogmorecife.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -22,6 +26,12 @@ public class CursomvApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private EstadoRepository estadoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomvApplication.class, args);
@@ -58,7 +68,20 @@ public class CursomvApplication implements CommandLineRunner {
 		p3.setCategorias(Arrays.asList(cat1));
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
-		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));		
+		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));	
+		
+		Estado est1 = new Estado(null,"Minas Gerais");
+		Estado est2 = new Estado(null,"São Paulo");
+		
+		Cidade c1 = new Cidade(null,"Uberlandia",est1);
+		Cidade c2 = new Cidade(null,"São Paulo",est2);
+		Cidade c3 = new Cidade(null,"Campinas",est2);
+		
+		est1.setCidades(Arrays.asList(c1));
+		est2.setCidades(Arrays.asList(c2,c3));
+		
+		estadoRepository.saveAll(Arrays.asList(est1,est2));
+		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));		
 		
 	}
 
