@@ -2,7 +2,9 @@ package br.org.ogmorecife.cursomc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,10 +13,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.org.ogmorecife.cursomc.domain.Categoria;
 import br.org.ogmorecife.cursomc.domain.Cidade;
+import br.org.ogmorecife.cursomc.domain.Cliente;
+import br.org.ogmorecife.cursomc.domain.Endereco;
 import br.org.ogmorecife.cursomc.domain.Estado;
 import br.org.ogmorecife.cursomc.domain.Produto;
+import br.org.ogmorecife.cursomc.domain.enums.TipoCliente;
 import br.org.ogmorecife.cursomc.repositories.CategoriaRepository;
 import br.org.ogmorecife.cursomc.repositories.CidadeRepository;
+import br.org.ogmorecife.cursomc.repositories.ClienteRepository;
+import br.org.ogmorecife.cursomc.repositories.EnderecoRepository;
 import br.org.ogmorecife.cursomc.repositories.EstadoRepository;
 import br.org.ogmorecife.cursomc.repositories.ProdutoRepository;
 
@@ -32,6 +39,12 @@ public class CursomvApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EstadoRepository estadoRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomvApplication.class, args);
@@ -81,7 +94,21 @@ public class CursomvApplication implements CommandLineRunner {
 		est2.setCidades(Arrays.asList(c2,c3));
 		
 		estadoRepository.saveAll(Arrays.asList(est1,est2));
-		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));		
+		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
+		
+		Cliente cli1 = new Cliente(null,"Maria Silva","maria@gmail.com","36378912377",TipoCliente.PESSOAFISICA);
+		
+		//Set<String> tl = new HashSet<>();
+		//tl.addAll(Arrays.asList("12345678","32165487"));
+		cli1.getTelefone().addAll(Arrays.asList("12345678","32165487"));
+		
+		Endereco e1 = new Endereco(null,"Rua Flores","300","Apt 203","Jardim","38220834",cli1,c1);
+		Endereco e2 = new Endereco(null,"Av Matos","105","Sala 800","Centro","38777012",cli1,c2);
+		
+		cli1.getEndereco().addAll(Arrays.asList(e1,e2));
+		
+		clienteRepository.save(cli1);
+		enderecoRepository.saveAll(Arrays.asList(e1,e2));
 		
 	}
 
