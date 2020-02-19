@@ -12,12 +12,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import br.org.ogmorecife.cursomc.domain.enums.TipoCliente;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler","enderecos"})
 public class Cliente implements Serializable{		
 	private static final long serialVersionUID = 1L;
 	
@@ -29,11 +33,12 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	@JsonManagedReference	
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	@ElementCollection
-	@CollectionTable(name = "TALEFONE")	
+	@CollectionTable(name = "TELEFONE") 	
 	private Set<String> telefone = new HashSet<>();//this type doesn't permit duplicated values; 
 	
 	public Cliente() {		

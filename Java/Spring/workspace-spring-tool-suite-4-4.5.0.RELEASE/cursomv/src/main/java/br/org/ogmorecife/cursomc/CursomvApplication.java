@@ -1,10 +1,10 @@
 package br.org.ogmorecife.cursomc;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+//import java.util.HashSet;
+//import java.util.List;
+//import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -106,6 +106,7 @@ public class CursomvApplication implements CommandLineRunner {
 		Endereco e2 = new Endereco(null,"Av Matos","105","Sala 800","Centro","38777012",cli1,c2);
 		
 		cli1.getEndereco().addAll(Arrays.asList(e1,e2));
+		
 		
 		clienteRepository.save(cli1);
 		enderecoRepository.saveAll(Arrays.asList(e1,e2));
